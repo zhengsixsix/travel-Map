@@ -10,6 +10,7 @@ import { slugify } from "./scripts/slugify";
 import { bundledLanguages, getHighlighter } from "shikiji";
 import matter from "gray-matter";
 import Components from "unplugin-vue-components/vite";
+import { VitePWA } from "vite-plugin-pwa";
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -89,8 +90,83 @@ export default defineConfig({
       dts: true,
       include: [/\.vue$/, /\.vue\?vue/, /\.md$/],
     }),
+    VitePWA({
+      registerType: "autoUpdate",
+      includeAssets: ["favicon.ico", "robots.txt", "icons/*.png"],
+      manifest: {
+        name: "旅行地图 - Travel Map",
+        short_name: "旅行地图",
+        description: "记录和展示您的旅行足迹",
+        theme_color: "#4CAF50",
+        icons: [
+          {
+            src: "/icons/icon-192x192.png",
+            sizes: "192x192",
+            type: "image/png",
+          },
+          {
+            src: "/icons/icon-512x512.png",
+            sizes: "512x512",
+            type: "image/png",
+          },
+        ],
+      },
+      workbox: {
+        globPatterns: ["**/*.{js,css,html,ico,png,svg,woff2}", "**/*.webmanifest"],
+        globIgnores: ["**/geojson/**/*.json"],
+        maximumFileSizeToCacheInBytes: 5 * 1024 * 1024, // 5MB 上限，超出不预缓存
+        runtimeCaching: [
+          {
+            urlPattern: /\.(?:png|jpg|jpeg|svg|gif)$/,
+            handler: "CacheFirst",
+            options: {
+              cacheName: "images-cache",
+              expiration: {
+                maxEntries: 100,
+                maxAgeSeconds: 30 * 24 * 60 * 60, // 30 days
+              },
+            },
+          },
+          {
+            // 运行时缓存本地 geojson 文件
+            urlPattern: ({ url }) => url.pathname.includes('/geojson/'),
+            handler: "StaleWhileRevalidate",
+            options: {
+              cacheName: "geojson-cache",
+              expiration: {
+                maxEntries: 50,
+                maxAgeSeconds: 7 * 24 * 60 * 60, // 7 days
+              },
+            },
+          },
+        ],
+      },
+    }),
   ],
   resolve: {
     alias: [{ find: "~/", replacement: `${resolve(__dirname, "src")}/` }],
+  },
+  build: {
+    target: "esnext",
+    minify: "terser",
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true,
+      },
+    },
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          "vue-vendor": ["vue", "vue-router"],
+          "ol-vendor": ["ol"],
+          "markdown-vendor": ["markdown-it", "gray-matter"],
+        },
+      },
+    },
+    chunkSizeWarningLimit: 1000,
+  },
+  optimizeDeps: {
+    include: ["vue", "vue-router", "ol"],
   },
 });

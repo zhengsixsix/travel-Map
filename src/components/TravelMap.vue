@@ -1,31 +1,89 @@
 <script setup lang="ts">
-import { onMounted } from "vue";
+import { onMounted, onBeforeUnmount, onUnmounted } from "vue";
+import { useRouter } from "vue-router";
 import { SetupMap } from "~/hooks/useMap/index";
-const { initMap } = SetupMap();
+import ControlPanel from "./ControlPanel.vue";
+
+const router = useRouter();
+const { initMap, map, destroyMap } = SetupMap(router);
+
+let isInitialized = false;
+
 onMounted(() => {
-  initMap();
+  console.log('TravelMap component mounted');
+  
+  // 确保容器存在
+  const mapContainer = document.querySelector('#map');
+  if (!mapContainer) {
+    console.error('Map container not found');
+    return;
+  }
+  
+  // 清理可能存在的旧内容
+  mapContainer.innerHTML = '';
+  
+  // 延迟初始化，确保 DOM 已准备好
+  setTimeout(() => {
+    if (!isInitialized) {
+      try {
+        initMap();
+        isInitialized = true;
+        console.log('Map initialized successfully');
+      } catch (error) {
+        console.error('Failed to initialize map:', error);
+      }
+    }
+  }, 100);
 });
+
+// 组件卸载前清理地图
+onBeforeUnmount(() => {
+  console.log('TravelMap component unmounting');
+  if (isInitialized) {
+    destroyMap();
+    isInitialized = false;
+  }
+});
+
+// 双重保障：组件卸载后再次清理
+onUnmounted(() => {
+  console.log('TravelMap component unmounted');
+  if (isInitialized) {
+    destroyMap();
+    isInitialized = false;
+  }
+});
+
 </script>
 
 <template>
-  <div id="map"></div>
-  <div id="map_marker_preview">
-    <div class="img_box">
-      <img src="" />
+  <div class="travel-map-container">
+    <div id="map"></div>
+    <div id="map_marker_preview">
+      <div class="img_box">
+        <img src="" />
+      </div>
+      <div class="info">
+        <div class="title" />
+        <div class="desc" />
+        <div class="date" />
+      </div>
     </div>
-    <div class="info">
-      <div class="title" />
-      <div class="desc" />
-      <div class="date" />
-    </div>
+    <ControlPanel />
   </div>
 </template>
 
 <style lang="scss" scoped>
+.travel-map-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
 #map {
-    width: 100%;
-    height: 100%;
-  }
+  width: 100%;
+  height: 100%;
+}
 #map_marker_preview {
   display: flex;
   box-sizing: border-box;

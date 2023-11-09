@@ -88,7 +88,30 @@ export const MARKER_MAP = {
       },
     },
   },
-  四川: {},
+  四川: {
+    children: {
+      甘孜藏族自治州: {
+        children: {
+          阿坝: {
+            coords: [102.22, 31.90],
+            route: "/travel/ganzi/aba",
+          },
+          稻城: {
+            coords: [100.30, 29.04],
+            route: "/travel/ganzi/daocheng",
+          },
+          康定: {
+            coords: [101.96, 30.00],
+            route: "/travel/ganzi/kangding",
+          },
+          理塘: {
+            coords: [100.27, 30.00],
+            route: "/travel/ganzi/litang",
+          },
+        },
+      },
+    },
+  },
   台湾: {},
   天津: {},
   西藏: {},

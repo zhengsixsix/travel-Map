@@ -155,6 +155,7 @@ import {
 import { pointerMove, click } from "ol/events/condition";
 
 import { toRadians } from "ol/math";
+import { unByKey } from "ol/Observable";
 
 export {
   Collection,
@@ -296,4 +297,5 @@ export {
   pointerMove,
   click,
   toRadians,
+  unByKey,
 };
