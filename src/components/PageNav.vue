@@ -15,8 +15,11 @@ const canGoBack = computed(() => {
 });
 
 const handleBack = () => {
-  // 直接返回首页，避免历史记录问题
-  router.push('/');
+  if (window.history.length > 1) {
+    router.back();
+  } else {
+    router.push('/');
+  }
 };
 
 const handleHome = () => {
@@ -29,16 +32,10 @@ const handleHome = () => {
     <div class="page-nav-container">
       <!-- 左侧：返回按钮 -->
       <div class="page-nav-left">
-        <button
-          v-if="showBack !== false"
-          class="nav-button back-button"
-          @click="handleBack"
-          aria-label="返回"
-        >
+        <button class="nav-icon-button back-button" @click="handleBack" aria-label="返回" title="返回上一页">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <path d="M19 12H5M12 19l-7-7 7-7" />
+            <path d="M19 12H5M12 19l-7-7 7-7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
           </svg>
-          <span class="button-text">返回</span>
         </button>
       </div>
 
@@ -49,17 +46,13 @@ const handleHome = () => {
 
       <!-- 右侧：首页按钮 -->
       <div class="page-nav-right">
-        <button
-          v-if="showHome !== false"
-          class="nav-button home-button"
-          @click="handleHome"
-          aria-label="返回首页"
-        >
+        <button class="nav-icon-button home-button" @click="handleHome" aria-label="返回首页" title="返回首页">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-            <polyline points="9 22 9 12 15 12 15 22" />
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke-width="2.5" stroke-linecap="round"
+              stroke-linejoin="round" />
+            <polyline points="9 22 9 12 15 12 15 22" stroke-width="2.5" stroke-linecap="round"
+              stroke-linejoin="round" />
           </svg>
-          <span class="button-text">首页</span>
         </button>
       </div>
     </div>
@@ -73,10 +66,10 @@ const handleHome = () => {
   left: 0;
   right: 0;
   z-index: 100;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.5);
 }
 
 .page-nav-container {
@@ -107,79 +100,65 @@ const handleHome = () => {
 
 .page-title {
   margin: 0;
-  font-size: 18px;
-  font-weight: 600;
+  font-family: "ZCOOL KuaiLe", cursive;
+  font-size: 20px;
+  font-weight: 400;
   color: #333;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  letter-spacing: 0.5px;
 
   @media (max-width: 640px) {
-    font-size: 16px;
+    font-size: 18px;
   }
 }
 
-.nav-button {
+.nav-icon-button {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
   border: none;
-  background: #f5f5f5;
-  color: #666;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 500;
+  background: white;
+  border-radius: 50%;
   cursor: pointer;
-  transition: all 0.2s ease;
-  white-space: nowrap;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 
   svg {
-    width: 20px;
-    height: 20px;
-    stroke-width: 2;
-    flex-shrink: 0;
-  }
-
-  &:hover {
-    background: #e0e0e0;
-    color: #333;
-    transform: translateY(-1px);
-  }
-
-  &:active {
-    transform: translateY(0);
-  }
-
-  @media (max-width: 640px) {
-    padding: 8px 12px;
-    font-size: 13px;
-    gap: 6px;
-
-    svg {
-      width: 18px;
-      height: 18px;
-    }
-  }
-}
-
-.button-text {
-  @media (max-width: 480px) {
-    display: none;
+    width: 16px;
+    height: 16px;
+    transition: transform 0.3s ease;
   }
 }
 
 .back-button {
-  svg {
-    margin-left: -4px;
+  color: #0277BD;
+  /* Bright Blue */
+  background: #E1F5FE;
+
+  &:hover {
+    background: #B3E5FC;
+
+    svg {
+      transform: translateX(-2px);
+    }
   }
 }
 
 .home-button {
-  background: transparent;
-  
+  color: #EF6C00;
+  /* Orange */
+  background: #FFF3E0;
+
   &:hover {
-    background: #f5f5f5;
+    background: #FFE0B2;
+
+    svg {
+      transform: scale(1.1);
+    }
   }
 }
 

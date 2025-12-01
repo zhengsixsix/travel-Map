@@ -2,6 +2,7 @@
 import { useRoute } from 'vue-router';
 import { computed, watch } from 'vue';
 import PageNav from './components/PageNav.vue';
+import BottomNav from './components/BottomNav.vue';
 import ImageViewer from './components/ImageViewer.vue';
 import { useImageClick } from './composables/useImageClick';
 
@@ -9,7 +10,12 @@ const route = useRoute();
 
 // 判断是否显示导航（首页不显示）
 const showNav = computed(() => {
-  return route.path !== '/';
+  return route.path !== '/' && route.path !== '/gallery' && route.path !== '/stats';
+});
+
+// 判断是否是主标签页 (Home, Gallery, Stats)
+const isMainPage = computed(() => {
+  return ['/', '/gallery', '/stats'].includes(route.path);
 });
 
 // 判断是否是地图页（首页）
@@ -44,6 +50,9 @@ const { showViewer, currentSrc, currentAlt, closeViewer } = useImageClick();
       </router-view>
     </div>
     
+    <!-- 底部导航菜单 -->
+    <BottomNav v-if="isMainPage" />
+    
     <!-- 全局图片查看器 -->
     <ImageViewer 
       :show="showViewer" 
@@ -67,6 +76,7 @@ body {
   height: 100%;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-family: "Nunito", system-ui, -apple-system, sans-serif;
 }
 
 #app {

@@ -199,6 +199,7 @@ onBeforeUnmount(() => {
 <style lang="scss" scoped>
 .image-gallery {
   width: 100%;
+  font-family: "Nunito", sans-serif;
 }
 
 .gallery-grid {
@@ -210,12 +211,14 @@ onBeforeUnmount(() => {
 
 .gallery-item {
   cursor: pointer;
-  border-radius: 12px;
+  border-radius: 16px;
   overflow: hidden;
-  transition: transform 0.3s ease;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 
   &:hover {
-    transform: translateY(-4px);
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.15);
 
     .image-overlay {
       opacity: 1;
@@ -229,7 +232,7 @@ onBeforeUnmount(() => {
   padding-bottom: 75%; // 4:3 aspect ratio
   background: #f5f5f5;
   overflow: hidden;
-  border-radius: 12px;
+  border-radius: 16px;
 }
 
 .gallery-image {
@@ -239,10 +242,10 @@ onBeforeUnmount(() => {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.3s ease;
+  transition: transform 0.5s ease;
 
   .gallery-item:hover & {
-    transform: scale(1.05);
+    transform: scale(1.1);
   }
 }
 
@@ -255,16 +258,22 @@ onBeforeUnmount(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-  background-size: 200% 100%;
-  animation: loading 1.5s ease-in-out infinite;
+  background: linear-gradient(45deg, #E1F5FE, #FFF9C4, #E1F5FE);
+  background-size: 200% 200%;
+  animation: gradientBG 3s ease infinite;
+}
+
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 .placeholder-spinner {
   width: 40px;
   height: 40px;
-  border: 3px solid #ddd;
-  border-top-color: #999;
+  border: 3px solid rgba(255,255,255,0.5);
+  border-top-color: #0277BD;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }

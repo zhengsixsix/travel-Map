@@ -13,6 +13,7 @@ export function CreateMarkerLayer() {
   const container = new Vector({
     source: new SourceVector(),
   });
+  container.set('name', 'markers');
   const markerList = CreateMapMarkerData();
   markerList.forEach((item) => {
     const pointFeature = CreatePointFeature(item);

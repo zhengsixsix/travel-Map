@@ -119,10 +119,11 @@ const emit = defineEmits<{
 .statistics-panel {
   position: relative;
   background: white;
-  border-radius: 16px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
   overflow: hidden;
   transition: all 0.3s ease;
+  font-family: "Nunito", sans-serif;
 
   &.collapsed {
     .panel-header {
@@ -142,31 +143,36 @@ const emit = defineEmits<{
 
 .panel-title {
   margin: 0;
-  font-size: 18px;
-  font-weight: 600;
+  font-family: "ZCOOL KuaiLe", cursive;
+  font-size: 20px;
+  font-weight: 400;
   color: #333;
+  letter-spacing: 1px;
 }
 
 .toggle-button {
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   border: none;
   background: #f5f5f5;
-  border-radius: 8px;
+  border-radius: 50%;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  color: #666;
 
   svg {
     width: 20px;
     height: 20px;
-    stroke-width: 2;
+    stroke-width: 2.5;
   }
 
   &:hover {
     background: #e0e0e0;
+    transform: rotate(90deg);
+    color: #333;
   }
 }
 
@@ -184,22 +190,52 @@ const emit = defineEmits<{
   display: flex;
   align-items: center;
   padding: 16px;
-  background: #f9f9f9;
-  border-radius: 12px;
+  background: white;
+  border-radius: 16px;
+  border: 2px solid transparent;
+  border-color: var(--card-color);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--card-color);
+    opacity: 0.1;
+    z-index: 0;
+  }
+  
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    
+    &::before {
+      opacity: 0.2;
+    }
+  }
 }
 
 .stat-icon {
   font-size: 32px;
   margin-right: 12px;
+  z-index: 1;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
 }
 
 .stat-info {
   flex: 1;
+  z-index: 1;
 }
 
 .stat-value {
   font-size: 24px;
-  font-weight: 700;
+  font-weight: 800;
   color: #333;
   line-height: 1;
   margin-bottom: 4px;
@@ -207,19 +243,20 @@ const emit = defineEmits<{
 
 .stat-unit {
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 600;
   color: #666;
 }
 
 .stat-label {
-  font-size: 12px;
-  color: #999;
+  font-size: 13px;
+  font-weight: 600;
+  color: #666;
 }
 
 
 .expand-enter-active,
 .expand-leave-active {
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
   overflow: hidden;
 }
 
@@ -227,12 +264,14 @@ const emit = defineEmits<{
 .expand-leave-to {
   max-height: 0;
   opacity: 0;
+  transform: scale(0.95);
 }
 
 .expand-enter-to,
 .expand-leave-from {
   max-height: 600px;
   opacity: 1;
+  transform: scale(1);
 }
 
 @media (max-width: 640px) {
@@ -251,16 +290,6 @@ const emit = defineEmits<{
 
   .stat-value {
     font-size: 20px;
-  }
-
-  .achievements {
-    justify-content: space-between;
-  }
-
-  .achievement-badge {
-    width: 44px;
-    height: 44px;
-    font-size: 22px;
   }
 }
 </style>

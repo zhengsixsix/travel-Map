@@ -7,16 +7,20 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
+    BottomNav: typeof import('./src/components/BottomNav.vue')['default']
     ControlPanel: typeof import('./src/components/ControlPanel.vue')['default']
     DataManager: typeof import('./src/components/DataManager.vue')['default']
     ImageGallery: typeof import('./src/components/ImageGallery.vue')['default']
     ImageViewer: typeof import('./src/components/ImageViewer.vue')['default']
     ImgList: typeof import('./src/components/imgItem/ImgList.vue')['default']
     PageNav: typeof import('./src/components/PageNav.vue')['default']
+    PhotoGallery: typeof import('./src/components/PhotoGallery.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SearchBar: typeof import('./src/components/SearchBar.vue')['default']
     StatisticsPanel: typeof import('./src/components/StatisticsPanel.vue')['default']
+    StatsPage: typeof import('./src/components/StatsPage.vue')['default']
+    TimelineControl: typeof import('./src/components/TimelineControl.vue')['default']
     TravelMap: typeof import('./src/components/TravelMap.vue')['default']
   }
 }
